@@ -118,11 +118,13 @@ namespace PruebaRecuperacion.Servicios
                         break;
 
                     case 1:
-                        Console.WriteLine("");
+                        Console.WriteLine("Se realizara un pedido");
+                        crearPedido();
                         break;
 
                     case 2:
                         Console.WriteLine("Escribir en un fichero todas las ventas");
+                        escribirVentasEnFichero();
                         break;
                 }
             }
@@ -136,6 +138,7 @@ namespace PruebaRecuperacion.Servicios
 
             Console.WriteLine("Introduzca la fecha para escribir las ventas (dd-MM-yyyy): ");
             fechaAPedir=DateTime.ParseExact(Console.ReadLine(),formato,proveedor);
+            Console.WriteLine(fechaAPedir);
             
             String rutaFichero = String.Concat(fechaAPedir.ToString("ddMMyyyy"), ".txt");
             StreamWriter sw = new StreamWriter(rutaFichero,true);
@@ -145,11 +148,45 @@ namespace PruebaRecuperacion.Servicios
                 
                 if (fechaAPedir.Date.ToString("dd-MM-yyyy") == venta.FechaVenta.Date.ToString("dd-MM-yyyy"))
                 {
-                    sw.Write("……….\r\nVenta número: ",venta.IdVenta,"\r\nEuros:",venta.ImporteVenta,"\r\nInstante de compra:",venta.FechaVenta, "\r\n……….\r\n");
+                    sw.Write(String.Concat("……….\r\nVenta número: ",venta.IdVenta,"\r\nEuros:",venta.ImporteVenta,"\r\nInstante de compra:",venta.FechaVenta, "\r\n……….\r\n"));
                 }
             }
 
             sw.Close();
+        }
+
+        private void crearPedido()
+        {
+            string respuesta = "";
+            ProductoDto producto=new ProductoDto();
+            string formato = "dd-MM-yyyy";
+            CultureInfo proveedor=new CultureInfo("en-US");
+            do
+            {
+                Console.WriteLine("Introduzca el nombre del producto: ");
+                producto.NombreProducto = Console.ReadLine();
+                Console.WriteLine("Introduzca la cantidad del producto: ");
+                producto.CantidadProducto = Int32.Parse(Console.ReadLine());
+
+                Program.listaProductos.Add(producto);
+
+                Console.WriteLine("¿Desea hacer otro producto?");
+                respuesta = Console.ReadLine();
+
+                if (respuesta == "n")
+                {
+                    Console.WriteLine("Introduzca la fecha de entrega del pedido:(dd-MM-yyyy) ");
+                    producto.FechaEntrega = DateTime.ParseExact(Console.ReadLine(), formato, proveedor);
+                    break;
+                }
+                
+            } while (respuesta != "n");
+
+            foreach(ProductoDto producto1 in Program.listaProductos)
+            {
+                Console.WriteLine(producto1.ToString());
+            }
+            
         }
 
         private long iDAuto()

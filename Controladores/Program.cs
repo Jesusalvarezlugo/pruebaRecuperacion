@@ -6,6 +6,7 @@ namespace PruebaRecuperacion.Controladores
     class Program
     {
         public static List<VentaDto> listaVentas = new List<VentaDto>();
+        public static List<ProductoDto> listaProductos = new List<ProductoDto>();
         public static void Main(string[] args)
         {
             MenuInterfaz mi= new MenuImplementacion();
