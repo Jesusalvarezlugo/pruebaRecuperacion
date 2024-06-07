@@ -11,6 +11,7 @@ namespace PruebaRecuperacion.Dtos
         //Atributos
 
         long idProducto;
+        long idPedido;
         string nombreProducto = "aaaaa";
         int cantidadProducto = 1;
         DateTime fechaEntrega=DateTime.Now;

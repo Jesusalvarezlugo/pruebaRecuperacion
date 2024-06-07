@@ -46,6 +46,7 @@ namespace PruebaRecuperacion.Servicios
             Console.WriteLine("0. Salir de la aplicacion");
             Console.WriteLine("1. Crear un nuevo pedido");
             Console.WriteLine("2. Escribir en un fichero todas las ventas");
+            Console.WriteLine("3. Escribir en un fichero el pedido");
             Console.WriteLine("#####################");
             Console.WriteLine("elija una opcion: ");
             opcion = Console.ReadKey(true).KeyChar - ('0');

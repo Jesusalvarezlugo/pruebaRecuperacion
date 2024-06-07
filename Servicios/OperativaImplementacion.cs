@@ -65,6 +65,7 @@ namespace PruebaRecuperacion.Servicios
         public void menuEmp()
         {
             MenuInterfaz mi = new MenuImplementacion();
+            FicheroInterfaz fi = new FicheroImplementacion();
             int opcionS;
             bool cerrarMenuEmp = false;
 
@@ -90,6 +91,12 @@ namespace PruebaRecuperacion.Servicios
                             Console.WriteLine("Se calculara el total de ventas diario");
                             calculoVentasDiario();
                             break;
+
+                        default:
+                            fi.escribirEnFicheroLog("Error al introducir una opcion en el menu de gerencia.");
+                            break;
+
+
                     }
                 }
                 catch (Exception ex)
@@ -103,6 +110,7 @@ namespace PruebaRecuperacion.Servicios
         public void menuGer()
         {
             MenuInterfaz mi = new MenuImplementacion();
+            FicheroInterfaz fi = new FicheroImplementacion();
             int opcionS;
             bool cerrarMenuGer = false;
 
@@ -125,6 +133,15 @@ namespace PruebaRecuperacion.Servicios
                     case 2:
                         Console.WriteLine("Escribir en un fichero todas las ventas");
                         escribirVentasEnFichero();
+                        break;
+
+                    case 3:
+                        Console.WriteLine("Escribir en un fichero el pedido");
+                        imprimirPedidos();
+                        break;
+
+                    default:
+                        fi.escribirEnFicheroLog("Error al introducir una opcion en el menu de gerencia.");
                         break;
                 }
             }
@@ -158,33 +175,37 @@ namespace PruebaRecuperacion.Servicios
         private void crearPedido()
         {
             string respuesta = "";
-            ProductoDto producto=new ProductoDto();
+            DateTime fechaPedido=DateTime.Now;
             string formato = "dd-MM-yyyy";
             CultureInfo proveedor=new CultureInfo("en-US");
             do
             {
+                ProductoDto producto = new ProductoDto();
                 Console.WriteLine("Introduzca el nombre del producto: ");
                 producto.NombreProducto = Console.ReadLine();
                 Console.WriteLine("Introduzca la cantidad del producto: ");
                 producto.CantidadProducto = Int32.Parse(Console.ReadLine());
-
                 Program.listaProductos.Add(producto);
 
-                Console.WriteLine("¿Desea hacer otro producto?");
+
+                Console.WriteLine("¿Desea introducir otro producto?");
                 respuesta = Console.ReadLine();
 
                 if (respuesta == "n")
                 {
                     Console.WriteLine("Introduzca la fecha de entrega del pedido:(dd-MM-yyyy) ");
-                    producto.FechaEntrega = DateTime.ParseExact(Console.ReadLine(), formato, proveedor);
+                    fechaPedido = DateTime.ParseExact(Console.ReadLine(), formato, proveedor);
+                    
+
                     break;
                 }
                 
             } while (respuesta != "n");
 
-            foreach(ProductoDto producto1 in Program.listaProductos)
+            foreach(ProductoDto producto in Program.listaProductos)
             {
-                Console.WriteLine(producto1.ToString());
+                producto.FechaEntrega = fechaPedido;
+                Console.WriteLine(producto.ToString());
             }
             
         }
@@ -204,6 +225,17 @@ namespace PruebaRecuperacion.Servicios
             }
 
             return nuevoId;
+        }
+
+        private void imprimirPedidos()
+        {
+            FicheroInterfaz fi = new FicheroImplementacion();
+            DateTime fechaAPedir;
+            Console.WriteLine("Introduzca la fecha del pedido que desea imprimir (dd-MM-yyyy)");
+            fechaAPedir=Convert.ToDateTime(Console.ReadLine());
+
+            fi.escribirEnFicheros(String.Concat(fechaAPedir.ToString("ddMMyyyy"),".txt"));
+
         }
     }
 }
